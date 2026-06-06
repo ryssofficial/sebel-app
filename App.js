@@ -1,22 +1,30 @@
+// App.js
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as SecureStore from 'expo-secure-store';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
+// Import Halaman Utama
 import { LandingPage } from './src/Screens/LandingPage';
 import { AuthPage } from './src/Screens/AuthPage';
-import { DashboardSiswa } from './src/Screens/DashboardSiswa';
-import { DashboardGuru } from './src/Screens/DashboardGuru'; // Pastikan file ini ada nanti
+import DashboardPage from './src/Screens/DashboardPage'; 
+import { NotifikasiPage } from './src/Screens/NotifikasiPage';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [userToken, setUserToken] = useState(null);
-  const [userRole, setUserRole] = useState(null); // Tambahkan state Role
+  const [userRole, setUserRole] = useState(null); 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+
+    GoogleSignin.configure({
+      webClientId: '62197177120-995s2a9411qjk2g2qjmoj9bl3b3f92sk.apps.googleusercontent.com', // 🌟 WAJIB DIISI
+      offlineAccess: true,
+    });
     const bootstrapAsync = async () => {
       let token, role;
       try {
@@ -53,14 +61,23 @@ export default function App() {
             </Stack.Screen>
           </>
         ) : (
-          // JALUR PRIVATE BERDASARKAN ROLE
-          <Stack.Screen name="MainApp">
-            {(props) => (
-              userRole === 'Guru' ? 
-              <DashboardGuru {...props} onLogout={() => { setUserToken(null); setUserRole(null); }} /> : 
-              <DashboardSiswa {...props} onLogout={() => { setUserToken(null); setUserRole(null); }} />
-            )}
-          </Stack.Screen>
+          <>
+            {/* 🌟 Hapus initialParams di sini karena tidak reaktif */}
+            <Stack.Screen name="MainApp">
+              {(props) => (
+                <DashboardPage 
+                  {...props} 
+                  currentRole={userRole} // 🌟 Lempar state role yang reaktif sebagai custom props
+                  onLogout={() => { 
+                    setUserToken(null); 
+                    setUserRole(null); 
+                  }} 
+                />
+              )}
+            </Stack.Screen>
+            
+            <Stack.Screen name="Notifikasi" component={NotifikasiPage} />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>

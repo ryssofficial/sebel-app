@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, StyleSheet, Alert, ActivityIndicator } from 'react-native';
 import * as LocalAuthentication from 'expo-local-authentication';
 import * as SecureStore from 'expo-secure-store';
-import { GoogleSignin } from '@react-native-google-signin/google-signin'; 
 import { HappyHuesTheme } from '../Constants/Theme';
 import { BrutalistButton } from '../Components/Brutalist';
 import { AxiosConfig } from '../Services/AxiosConfig'; 

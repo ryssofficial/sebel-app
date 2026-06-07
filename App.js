@@ -1,10 +1,8 @@
-// App.js
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as SecureStore from 'expo-secure-store';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 // Import Halaman Utama
 import { LandingPage } from './src/Screens/LandingPage';
@@ -20,11 +18,7 @@ export default function App() {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-
-    GoogleSignin.configure({
-      webClientId: '62197177120-995s2a9411qjk2g2qjmoj9bl3b3f92sk.apps.googleusercontent.com', // 🌟 WAJIB DIISI
-      offlineAccess: true,
-    });
+    // 🌟 GoogleSignin sudah dihapus dari sini
     const bootstrapAsync = async () => {
       let token, role;
       try {
@@ -62,12 +56,11 @@ export default function App() {
           </>
         ) : (
           <>
-            {/* 🌟 Hapus initialParams di sini karena tidak reaktif */}
             <Stack.Screen name="MainApp">
               {(props) => (
                 <DashboardPage 
                   {...props} 
-                  currentRole={userRole} // 🌟 Lempar state role yang reaktif sebagai custom props
+                  currentRole={userRole} 
                   onLogout={() => { 
                     setUserToken(null); 
                     setUserRole(null); 
@@ -75,7 +68,6 @@ export default function App() {
                 />
               )}
             </Stack.Screen>
-            
             <Stack.Screen name="Notifikasi" component={NotifikasiPage} />
           </>
         )}

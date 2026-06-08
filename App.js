@@ -4,19 +4,21 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import * as SecureStore from 'expo-secure-store';
 
+// Import Halaman Utama
 import { LandingPage } from './src/Screens/LandingPage';
 import { AuthPage } from './src/Screens/AuthPage';
-import { DashboardSiswa } from './src/Screens/DashboardSiswa';
-import { DashboardGuru } from './src/Screens/DashboardGuru'; // Pastikan file ini ada nanti
+import DashboardPage from './src/Screens/DashboardPage'; 
+import { NotifikasiPage } from './src/Screens/NotifikasiPage';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [userToken, setUserToken] = useState(null);
-  const [userRole, setUserRole] = useState(null); // Tambahkan state Role
+  const [userRole, setUserRole] = useState(null); 
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // 🌟 GoogleSignin sudah dihapus dari sini
     const bootstrapAsync = async () => {
       let token, role;
       try {
@@ -53,14 +55,21 @@ export default function App() {
             </Stack.Screen>
           </>
         ) : (
-          // JALUR PRIVATE BERDASARKAN ROLE
-          <Stack.Screen name="MainApp">
-            {(props) => (
-              userRole === 'Guru' ? 
-              <DashboardGuru {...props} onLogout={() => { setUserToken(null); setUserRole(null); }} /> : 
-              <DashboardSiswa {...props} onLogout={() => { setUserToken(null); setUserRole(null); }} />
-            )}
-          </Stack.Screen>
+          <>
+            <Stack.Screen name="MainApp">
+              {(props) => (
+                <DashboardPage 
+                  {...props} 
+                  currentRole={userRole} 
+                  onLogout={() => { 
+                    setUserToken(null); 
+                    setUserRole(null); 
+                  }} 
+                />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="Notifikasi" component={NotifikasiPage} />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>

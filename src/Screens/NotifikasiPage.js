@@ -38,7 +38,6 @@ export function NotifikasiPage({ route }) {
         setLoading(true);
         try {
             const res = await NotifikasiResponse.getAll();
-            // Server Anda membungkus payload array data di dalam properti .data
             const finalData = Array.isArray(res) ? res : res?.data ?? [];
             setNotifikasi(finalData);
         } catch (err) {
@@ -57,7 +56,8 @@ export function NotifikasiPage({ route }) {
         try {
             await NotifikasiResponse.markAsRead(id);
             setNotifikasi(prev =>
-                prev.map(n => n.id_notif === id ? { ...n, is_read: true } : n)
+                // Diubah ke camelCase: n.idNotif & isRead
+                prev.map(n => n.idNotif === id ? { ...n, isRead: true } : n)
             );
         } catch (err) {
             console.error(err);
@@ -70,7 +70,8 @@ export function NotifikasiPage({ route }) {
         setActionLoading(true);
         try {
             await NotifikasiResponse.markAllAsRead();
-            setNotifikasi(prev => prev.map(n => ({ ...n, is_read: true })));
+            // Diubah ke camelCase: isRead
+            setNotifikasi(prev => prev.map(n => ({ ...n, isRead: true })));
             Alert.alert("Sukses", "Semua notifikasi telah ditandai dibaca.");
         } catch (err) {
             console.error(err);
@@ -92,7 +93,8 @@ export function NotifikasiPage({ route }) {
                     onPress: async () => {
                         try {
                             await NotifikasiResponse.delete(id);
-                            setNotifikasi(prev => prev.filter(n => n.id_notif !== id));
+                            // Diubah ke camelCase: n.idNotif
+                            setNotifikasi(prev => prev.filter(n => n.idNotif !== id));
                         } catch (err) {
                             console.error(err);
                             Alert.alert("Error", "Gagal menghapus data di server.");
@@ -103,16 +105,17 @@ export function NotifikasiPage({ route }) {
         );
     };
 
-    // Filter logis berdasarkan properti database PostgreSQL (is_read)
-    const unreadCount = notifikasi.filter(n => !n.is_read).length;
+    // Filter logis diubah ke camelCase: n.isRead
+    const unreadCount = notifikasi.filter(n => !n.isRead).length;
     const filteredData = notifikasi.filter(n => {
-        if (filter === "belum") return !n.is_read;
-        if (filter === "sudah") return n.is_read;
+        if (filter === "belum") return !n.isRead;
+        if (filter === "sudah") return n.isRead;
         return true;
     });
 
     const renderNotifItem = ({ item }) => {
-        const isUnread = !item.is_read;
+        // Diubah ke camelCase: item.isRead
+        const isUnread = !item.isRead;
 
         return (
             <View style={[
@@ -132,7 +135,8 @@ export function NotifikasiPage({ route }) {
                 <View style={styles.textContainer}>
                     <View style={styles.headerItem}>
                         <Text style={styles.judulText}>{item.judul}</Text>
-                        <Text style={styles.tanggalText}>🕐 {formatTanggal(item.tanggal_notif)}</Text>
+                        {/* Diubah ke camelCase: item.tanggalNotif */}
+                        <Text style={styles.tanggalText}>🕐 {formatTanggal(item.tanggalNotif)}</Text>
                     </View>
                     <Text style={styles.pesanText}>{item.pesan}</Text>
 
@@ -140,14 +144,16 @@ export function NotifikasiPage({ route }) {
                         {isUnread && (
                             <TouchableOpacity 
                                 style={[styles.miniButton, { backgroundColor: HappyHuesTheme.tertiary }]} 
-                                onPress={() => handleMarkAsRead(item.id_notif)}
+                                // Diubah ke camelCase: item.idNotif
+                                onPress={() => handleMarkAsRead(item.idNotif)}
                             >
                                 <Text style={styles.miniButtonText}>✓ Dibaca</Text>
                             </TouchableOpacity>
                         )}
                         <TouchableOpacity 
                             style={[styles.miniButton, { backgroundColor: HappyHuesTheme.secondary }]} 
-                            onPress={() => handleDelete(item.id_notif)}
+                            // Diubah ke camelCase: item.idNotif
+                            onPress={() => handleDelete(item.idNotif)}
                         >
                             <Text style={styles.miniButtonText}>🗑️ Hapus</Text>
                         </TouchableOpacity>
@@ -210,7 +216,8 @@ export function NotifikasiPage({ route }) {
             ) : (
                 <FlatList
                     data={filteredData}
-                    keyExtractor={(item) => item.id_notif.toString()}
+                    // Diubah ke camelCase: item.idNotif dengan fallback aman (?.)
+                    keyExtractor={(item, index) => item?.idNotif?.toString() || index.toString()}
                     renderItem={renderNotifItem}
                     contentContainerStyle={styles.listContent}
                 />
@@ -218,6 +225,8 @@ export function NotifikasiPage({ route }) {
         </SafeAreaView>
     );
 }
+
+// ... styles tetap sama seperti kode sebelumnya
 
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#e8e4e1' },

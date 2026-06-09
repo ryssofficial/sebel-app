@@ -138,8 +138,15 @@ export function DashboardGuru({ navigation, onLogout, data, onRefresh, refreshin
             </BrutalistCard>
 
             <View style={{ gap: 10, marginTop: 15 }}>
-                <BrutalistButton label="Mulai Presensi Kelas" onPress={() => {}} />
-                <BrutalistButton label="LOGOUT" type="secondary" onPress={() => handleLogout(onLogout)} />
+                    <BrutalistButton 
+                        label="MULAI PRESENSI KELAS" 
+                        onPress={() => navigation.navigate('Absensi')} 
+                    />
+                    <BrutalistButton 
+                        label="NILAI TUGAS" 
+                        onPress={() => navigation.navigate('NilaiTugas')} 
+                    />
+                    <BrutalistButton label="LOGOUT" type="secondary" onPress={() => handleLogout(onLogout)} />
             </View>
         </ScrollView>
     );
@@ -212,6 +219,8 @@ export function DashboardSiswa({ navigation, onLogout, data, onRefresh, refreshi
 
             <View style={{ gap: 10, marginTop: 15 }}>
                 <BrutalistButton label="Lihat Jadwal Lengkap" onPress={() => {}} />
+                <BrutalistButton label="LIHAT PRESENSI SAYA"  onPress={() => navigation.navigate('Absensi')} />
+                <BrutalistButton label="LIHAT NILAI TUGAS" onPress={() => navigation.navigate('NilaiTugas')} />
                 <BrutalistButton label="LOGOUT" type="secondary" onPress={() => handleLogout(onLogout)} />
             </View>
         </ScrollView>

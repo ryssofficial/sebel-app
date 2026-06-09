@@ -7,18 +7,21 @@ import * as SecureStore from 'expo-secure-store';
 // Import Halaman Utama
 import { LandingPage } from './src/Screens/LandingPage';
 import { AuthPage } from './src/Screens/AuthPage';
-import DashboardPage from './src/Screens/DashboardPage'; 
+import DashboardPage from './src/Screens/DashboardPage';
 import { NotifikasiPage } from './src/Screens/NotifikasiPage';
+
+// Import Fitur Muadz
+import AbsensiFitur from './src/Screens/AbsensiFitur';
+import NilaiTugasFitur from './src/Screens/NilaiTugasFitur';
 
 const Stack = createStackNavigator();
 
 export default function App() {
   const [userToken, setUserToken] = useState(null);
-  const [userRole, setUserRole] = useState(null); 
+  const [userRole, setUserRole] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // 🌟 GoogleSignin sudah dihapus dari sini
     const bootstrapAsync = async () => {
       let token, role;
       try {
@@ -44,12 +47,12 @@ export default function App() {
             <Stack.Screen name="Landing" component={LandingPage} />
             <Stack.Screen name="Login">
               {(props) => (
-                <AuthPage 
-                  {...props} 
+                <AuthPage
+                  {...props}
                   onLoginSuccess={(token, role) => {
                     setUserToken(token);
                     setUserRole(role);
-                  }} 
+                  }}
                 />
               )}
             </Stack.Screen>
@@ -58,17 +61,30 @@ export default function App() {
           <>
             <Stack.Screen name="MainApp">
               {(props) => (
-                <DashboardPage 
-                  {...props} 
-                  currentRole={userRole} 
-                  onLogout={() => { 
-                    setUserToken(null); 
-                    setUserRole(null); 
-                  }} 
+                <DashboardPage
+                  {...props}
+                  currentRole={userRole}
+                  onLogout={() => {
+                    setUserToken(null);
+                    setUserRole(null);
+                  }}
                 />
               )}
             </Stack.Screen>
+
             <Stack.Screen name="Notifikasi" component={NotifikasiPage} />
+
+            {/* ── Fitur Muadz ── */}
+            <Stack.Screen
+              name="Absensi"
+              component={AbsensiFitur}
+              options={{ headerShown: true, title: 'Data Presensi' }}
+            />
+            <Stack.Screen
+              name="NilaiTugas"
+              component={NilaiTugasFitur}
+              options={{ headerShown: true, title: 'Nilai Tugas' }}
+            />
           </>
         )}
       </Stack.Navigator>

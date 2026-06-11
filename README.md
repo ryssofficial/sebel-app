@@ -74,20 +74,14 @@ cd sebel-app
 npm install
 ```
 
-atau
-
-```bash
-yarn install
-```
-
 ### 6. Jalankan Aplikasi
 
 ```bash
-npm start
+npx expo start 
 ```
 
 atau
 
 ```bash
-yarn start
+npx expo start -c
 ```

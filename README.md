@@ -23,6 +23,7 @@ Fitur utama aplikasi meliputi:
 * Informasi siswa
 * Materi pembelajaran
 * Tugas dan penilaian
+* Sistem Absensi
 * Pengumuman sekolah
 * Jadwal kegiatan akademik
 * Notifikasi informasi terbaru
